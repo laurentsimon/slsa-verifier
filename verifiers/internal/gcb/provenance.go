@@ -27,7 +27,7 @@ type v01IntotoStatement struct {
 
 type provenance struct {
 	Build struct {
-		// TODO: compare to verified provenance.
+		// TODO(#221): compare to verified provenance.
 		// IntotoStatement v01IntotoStatement `json:"intotoStatement"`
 	} `json:"build"`
 	Kind        string           `json:"kind"`
@@ -35,7 +35,7 @@ type provenance struct {
 	Envelope    dsselib.Envelope `json:"envelope"`
 }
 
-type gloudProvenance struct {
+type gcloudProvenance struct {
 	ImageSummary struct {
 		Digest               string `json:"digest"`
 		FullyQualifiedDigest string `json:"fully_qualified_digest"`
@@ -48,13 +48,13 @@ type gloudProvenance struct {
 }
 
 type Provenance struct {
-	gcloudProv              *gloudProvenance
+	gcloudProv              *gcloudProvenance
 	verifiedProvenance      *provenance
 	verifiedIntotoStatement *v01IntotoStatement
 }
 
 func ProvenanceFromBytes(payload []byte) (*Provenance, error) {
-	var prov gloudProvenance
+	var prov gcloudProvenance
 	err := json.Unmarshal(payload, &prov)
 	if err != nil {
 		return nil, fmt.Errorf("json.Unmarshal: %w", err)
