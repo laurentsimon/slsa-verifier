@@ -101,6 +101,7 @@ type VerifyVSAOptions struct {
 	VerifierID     string
 	VerifiedLevels VSALevels
 	ResourceURI    string
+	PrintVSA       bool
 }
 
 var _ Interface = (*VerifyVSAOptions)(nil)
@@ -111,6 +112,8 @@ func (o *VerifyVSAOptions) AddFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&o.VerifierID, "verifier-id", "", "the unique verifier ID who created the VSA")
 	cmd.Flags().StringVar(&o.ResourceURI, "resource-uri", "", "the resource URI the VSA is for")
 	cmd.Flags().Var(&o.VerifiedLevels, "verified-levels", "verified levels of the artifacts")
+	cmd.Flags().BoolVar(&o.PrintVSA, "print-vsa", false,
+		"[optional] print the verified VSA to stdout")
 }
 
 func (ls *VSALevels) Type() string {

@@ -24,16 +24,17 @@ import (
 )
 
 const (
-	SUCCESS = "PASSED: Verified SLSA provenance"
-	FAILURE = "FAILED: SLSA verification failed"
+	SUCCESS         = "PASSED: Verified SLSA provenance"
+	FAILURE         = "FAILED: SLSA verification failed"
+	vsaShort        = "Use Verification SLSA Summary (VSA)"
+	provenanceShort = "Use SLSA provenance"
 )
 
-// TEST
 func verifyArtifactVsaCmd() *cobra.Command {
 	o := &verify.VerifyVSAOptions{}
 	cmd := &cobra.Command{
 		Use:   "vsa",
-		Short: "Use Verification SLSA Summary (VSA)",
+		Short: vsaShort,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
 				return errors.New("expects at least one artifact")
@@ -71,7 +72,7 @@ func verifyArtifactProvenanceCmd() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "provenance",
-		Short: "Use SLSA provenance",
+		Short: provenanceShort,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
 				return errors.New("expects at least one artifact")
@@ -114,17 +115,27 @@ func verifyArtifactProvenanceCmd() *cobra.Command {
 }
 
 func verifyImageCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "verify-image",
+		Short: "Verifies provenance on a container image",
+	}
+
+	cmd.AddCommand(verifyImageProvenanceCmd())
+	return cmd
+}
+
+func verifyImageProvenanceCmd() *cobra.Command {
 	o := &verify.VerifyOptions{}
 
 	cmd := &cobra.Command{
-		Use: "verify-image [flags] image",
+		Use:   "provenance",
+		Short: provenanceShort,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
 				return errors.New("expects a single path to an image")
 			}
 			return nil
 		},
-		Short: "Verifies SLSA provenance on a container image",
 		Run: func(cmd *cobra.Command, args []string) {
 			v := verify.VerifyImageCommand{
 				SourceURI:           o.SourceURI,
@@ -161,17 +172,29 @@ func verifyImageCmd() *cobra.Command {
 }
 
 func verifyNpmPackageCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "verify-npm-package",
+		Short: "Verifies provenance on an npm package",
+	}
+
+	// NOTE: We can later add support for
+	// VSA, publish, provenance.
+	cmd.AddCommand(verifyNpmAttestationsCmd())
+	return cmd
+}
+
+func verifyNpmAttestationsCmd() *cobra.Command {
 	o := &verify.VerifyNpmOptions{}
 
 	cmd := &cobra.Command{
-		Use: "verify-npm-package [flags] tarball",
+		Use: "attestations",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
 				return errors.New("expects a single path to an image")
 			}
 			return nil
 		},
-		Short: "Verifies SLSA provenance for an npm package tarball [experimental]",
+		Short: "Uses attestations from the registry",
 		Run: func(cmd *cobra.Command, args []string) {
 			v := verify.VerifyNpmPackageCommand{
 				SourceURI:           o.SourceURI,
