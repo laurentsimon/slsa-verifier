@@ -28,18 +28,56 @@ const (
 	FAILURE = "FAILED: SLSA verification failed"
 )
 
-func verifyArtifactCmd() *cobra.Command {
-	o := &verify.VerifyOptions{}
-
+// TEST
+func verifyArtifactVsaCmd() *cobra.Command {
+	o := &verify.VerifyVSAOptions{}
 	cmd := &cobra.Command{
-		Use: "verify-artifact [flags] artifact [artifact..]",
+		Use:   "vsa",
+		Short: "Use Verification SLSA Summary (VSA)",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
 				return errors.New("expects at least one artifact")
 			}
 			return nil
 		},
-		Short: "Verifies SLSA provenance on artifact blobs given as arguments (assuming same provenance)",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("vsa hello")
+			fmt.Println("levels:", o.VerifiedLevels[0] == verify.VSASourceLevel0)
+			fmt.Println("verifier.id:", o.VerifierID)
+		},
+	}
+
+	o.AddFlags(cmd)
+	cmd.MarkFlagRequired("vsa-path")
+	cmd.MarkFlagRequired("verifier-id")
+	cmd.MarkFlagRequired("verified-levels")
+
+	return cmd
+}
+
+func verifyArtifactCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "verify-artifact",
+		Short: "Verifies provenance on artifact blobs",
+	}
+
+	cmd.AddCommand(verifyArtifactVsaCmd())
+	cmd.AddCommand(verifyArtifactProvenanceCmd())
+	return cmd
+}
+
+func verifyArtifactProvenanceCmd() *cobra.Command {
+	o := &verify.VerifyOptions{}
+
+	cmd := &cobra.Command{
+		Use:   "provenance",
+		Short: "Use SLSA provenance",
+		Args: func(cmd *cobra.Command, args []string) error {
+			if len(args) < 1 {
+				return errors.New("expects at least one artifact")
+			}
+			return nil
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			v := verify.VerifyArtifactCommand{
 				ProvenancePath:      o.ProvenancePath,
