@@ -77,3 +77,5 @@ func Test_LevelsFromArray(t *testing.T) {
 		})
 	}
 }
+
+// TODO: tests for lower, greater, etc

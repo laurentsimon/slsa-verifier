@@ -3,7 +3,6 @@ package gha
 import (
 	"context"
 	"crypto/x509"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -31,12 +30,6 @@ type SignedAttestation struct {
 	SigningCert *x509.Certificate
 	// The associated verified Rekor entry
 	RekorEntry *models.LogEntryAnon
-}
-
-func EnvelopeFromBytes(payload []byte) (env *dsselib.Envelope, err error) {
-	env = &dsselib.Envelope{}
-	err = json.Unmarshal(payload, env)
-	return
 }
 
 // Verify Builder ID in provenance statement.

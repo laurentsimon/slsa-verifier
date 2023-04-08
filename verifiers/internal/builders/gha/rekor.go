@@ -32,6 +32,7 @@ import (
 	"github.com/slsa-framework/slsa-github-generator/signing/envelope"
 
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
+	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 
 const (
@@ -235,7 +236,7 @@ func GetValidSignedAttestationWithCert(rClient *client.Rekor,
 		return nil, fmt.Errorf("error unmarshaling certificate from pem")
 	}
 
-	env, err := EnvelopeFromBytes(provenance)
+	env, err := utils.EnvelopeFromBytes(provenance)
 	if err != nil {
 		return nil, err
 	}
@@ -264,7 +265,7 @@ func SearchValidSignedAttestation(ctx context.Context, artifactHash string, prov
 		return nil, err
 	}
 
-	env, err := EnvelopeFromBytes(provenance)
+	env, err := utils.EnvelopeFromBytes(provenance)
 	if err != nil {
 		return nil, err
 	}

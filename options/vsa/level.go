@@ -20,7 +20,10 @@ type Level interface {
 	LowerThan(Level) bool
 	GreaterThan(Level) bool
 	EqualTo(Level) bool
+<<<<<<< HEAD
 	ToInt() uint
+=======
+>>>>>>> 2f9bb34 (update)
 }
 type BuildLevel int
 
@@ -41,7 +44,11 @@ func LevelFromString(s string) (Level, error) {
 	return nil, errVsaInvalidTrack
 }
 
+<<<<<<< HEAD
 func BuildLevelFromString(s string) (*BuildLevel, error) {
+=======
+func BuildLevelFromString(s string) (Level, error) {
+>>>>>>> 2f9bb34 (update)
 	bl, err := parseLevel[BuildLevel](s, "SLSA_BUILD_LEVEL_")
 	if err != nil {
 		return nil, err
@@ -84,7 +91,11 @@ func (l *BuildLevel) EqualTo(o Level) bool {
 	return *l == *ol
 }
 
+<<<<<<< HEAD
 func SourceLevelFromString(s string) (*SourceLevel, error) {
+=======
+func SourceLevelFromString(s string) (Level, error) {
+>>>>>>> 2f9bb34 (update)
 	sl, err := parseLevel[SourceLevel](s, "SLSA_SOURCE_LEVEL_")
 	if err != nil {
 		return nil, err

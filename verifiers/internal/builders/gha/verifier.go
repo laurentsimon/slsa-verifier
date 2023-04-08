@@ -265,7 +265,7 @@ func (v *GHAVerifier) VerifyImage(ctx context.Context,
 			fmt.Fprintf(os.Stderr, "unexpected error getting payload from OCI registry %s", err)
 			continue
 		}
-		env, err := EnvelopeFromBytes(pyld)
+		env, err := utils.EnvelopeFromBytes(pyld)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "unexpected error parsing envelope from OCI registry %s", err)
 			continue

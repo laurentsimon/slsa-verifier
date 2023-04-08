@@ -57,13 +57,13 @@ type VsaVerifier interface {
 
 	// VerifyImage verifies a VSA for a supplied OCI image.
 	VerifyImage(ctx context.Context,
-		vsa []byte, artifactHash string,
+		vsa []byte, artifactImage string,
 		vsaOpts *options.VsaOpts,
 		verifierOpts *options.VerifierOpts,
 	) ([]byte, *utils.TrustedVerifierID, error)
 
 	VerifyNpmPackage(ctx context.Context,
-		vsa []byte, artifactHash string,
+		vsa []byte, tarballHash string,
 		vsaOpts *options.VsaOpts,
 		verifierOpts *options.VerifierOpts,
 	) ([]byte, *utils.TrustedVerifierID, error)

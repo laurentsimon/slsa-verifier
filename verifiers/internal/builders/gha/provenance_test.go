@@ -16,10 +16,11 @@ import (
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance"
 	v02 "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance/v0.2"
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance/v1.0"
+	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 
 func provenanceFromBytes(payload []byte) (slsaprovenance.Provenance, error) {
-	env, err := EnvelopeFromBytes(payload)
+	env, err := utils.EnvelopeFromBytes(payload)
 	if err != nil {
 		return nil, err
 	}

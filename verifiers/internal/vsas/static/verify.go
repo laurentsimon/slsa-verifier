@@ -91,17 +91,17 @@ func (v *StaticKeyVerifier) VerifyArtifact(ctx context.Context,
 
 	// Verify the VSA.
 	vsaOpts.ExpectedDigest = artifactHash
-	verifierID, err := vsaVerifier.Verify(ctx, vsaOpts, verifierOpts, v.metadata.encoding)
+	verifiedVsa, verifierID, err := vsaVerifier.Verify(artifactHash, vsaOpts, verifierOpts)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	return vsa, verifierID, nil
+	return verifiedVsa, verifierID, nil
 }
 
 // VerifyNpmPackage verifies an npm package tarball.
 func (v *StaticKeyVerifier) VerifyNpmPackage(ctx context.Context,
-	attestations []byte, artifactHash string,
+	attestations []byte, tarballHash string,
 	vsaOpts *options.VsaOpts,
 	verifierOpts *options.VerifierOpts,
 ) ([]byte, *utils.TrustedVerifierID, error) {
@@ -110,7 +110,7 @@ func (v *StaticKeyVerifier) VerifyNpmPackage(ctx context.Context,
 
 // VerifyImage verifies VSA for an OCI image.
 func (v *StaticKeyVerifier) VerifyImage(ctx context.Context,
-	vsa []byte, artifactHash string,
+	vsa []byte, artifactImage string,
 	vsaOpts *options.VsaOpts,
 	verifierOpts *options.VerifierOpts,
 ) ([]byte, *utils.TrustedVerifierID, error) {

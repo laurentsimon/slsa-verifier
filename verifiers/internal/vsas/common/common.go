@@ -4,4 +4,3 @@ package common
 type VsaVerifier struct {
 	ID string `json:"id"`
 }
-
