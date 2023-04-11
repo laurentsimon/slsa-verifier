@@ -96,7 +96,7 @@ func (v *StaticKeyVerifier) VerifyArtifact(ctx context.Context,
 		return nil, nil, err
 	}
 
-	return verifiedVsa, verifierID, nil
+	return vsa, verifierID, nil
 }
 
 // VerifyNpmPackage verifies an npm package tarball.
@@ -110,7 +110,7 @@ func (v *StaticKeyVerifier) VerifyNpmPackage(ctx context.Context,
 
 // VerifyImage verifies VSA for an OCI image.
 func (v *StaticKeyVerifier) VerifyImage(ctx context.Context,
-	vsa []byte, artifactImage string,
+	artifactImage string, vsa []byte,
 	vsaOpts *options.VsaOpts,
 	verifierOpts *options.VerifierOpts,
 ) ([]byte, *utils.TrustedVerifierID, error) {

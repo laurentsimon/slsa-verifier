@@ -50,14 +50,14 @@ type VsaVerifier interface {
 
 	// VerifyArtifact verifies a VSA for a supplied artifact.
 	VerifyArtifact(ctx context.Context,
-		vsa []byte, artifactHash string,
+		vsa []byte,
 		vsaOpts *options.VsaOpts,
 		verifierOpts *options.VerifierOpts,
 	) ([]byte, *utils.TrustedVerifierID, error)
 
 	// VerifyImage verifies a VSA for a supplied OCI image.
 	VerifyImage(ctx context.Context,
-		vsa []byte, artifactImage string,
+		artifactImage string, vsa []byte,
 		vsaOpts *options.VsaOpts,
 		verifierOpts *options.VerifierOpts,
 	) ([]byte, *utils.TrustedVerifierID, error)

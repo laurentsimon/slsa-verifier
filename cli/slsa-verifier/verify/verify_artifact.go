@@ -126,7 +126,7 @@ func (c *VerifyArtifactVsaCommand) Exec(ctx context.Context, artifact string) (*
 		return nil, err
 	}
 
-	verifiedVsa, outVerifierID, err := verifiers.VerifyArtifactVsa(ctx, vsa, artifactHash, vsaOpts, verifierOpts)
+	verifiedVsa, outVerifierID, err := verifiers.VerifyArtifactVsa(ctx, vsa, vsaOpts, verifierOpts)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Verifying artifact %s: FAILED: %v\n\n", artifact, err)
 		return nil, err

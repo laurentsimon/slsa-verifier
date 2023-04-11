@@ -29,7 +29,20 @@ func getVsaVerifier(verifierOpts *options.VerifierOpts) (register.VsaVerifier, e
 	return nil, fmt.Errorf("%w: %s", serrors.ErrorVsaVerifierNotSupported, verifierOpts.ExpectedID)
 }
 
-func VerifyImageVsa(ctx context.Context, artifactImage string,
+func VerifyImageVsa(ctx context.Context,
+	artifactImage string, vsa []byte,
+	vsaOpts *options.VsaOpts,
+	verifierOpts *options.VerifierOpts,
+) ([]byte, *utils.TrustedVerifierID, error) {
+	verifier, err := getVsaVerifier(verifierOpts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return verifier.VerifyImage(ctx, artifactImage, vsa, vsaOpts, verifierOpts)
+}
+
+func VerifyArtifactVsa(ctx context.Context,
 	vsa []byte,
 	vsaOpts *options.VsaOpts,
 	verifierOpts *options.VerifierOpts,
@@ -39,25 +52,12 @@ func VerifyImageVsa(ctx context.Context, artifactImage string,
 		return nil, nil, err
 	}
 
-	return verifier.VerifyImage(ctx, vsa, artifactImage, vsaOpts, verifierOpts)
-}
-
-func VerifyArtifactVsa(ctx context.Context,
-	vsa []byte, artifactHash string,
-	vsaOpts *options.VsaOpts,
-	verifierOpts *options.VerifierOpts,
-) ([]byte, *utils.TrustedVerifierID, error) {
-	verifier, err := getVsaVerifier(verifierOpts)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return verifier.VerifyArtifact(ctx, vsa, artifactHash,
+	return verifier.VerifyArtifact(ctx, vsa,
 		vsaOpts, verifierOpts)
 }
 
 func VerifyNpmPackageVsa(ctx context.Context,
-	attestations []byte, tarballHash string,
+	attestations []byte,
 	vsaOpts *options.VsaOpts,
 	verifierOpts *options.VerifierOpts,
 ) ([]byte, *utils.TrustedVerifierID, error) {
@@ -66,6 +66,6 @@ func VerifyNpmPackageVsa(ctx context.Context,
 		return nil, nil, err
 	}
 
-	return verifier.VerifyNpmPackage(ctx, attestations, tarballHash,
+	return verifier.VerifyNpmPackage(ctx, attestations,
 		vsaOpts, verifierOpts)
 }
