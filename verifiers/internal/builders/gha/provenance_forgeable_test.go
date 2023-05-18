@@ -10,8 +10,8 @@ import (
 	intotov02 "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/v0.2"
 	intotov1 "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/v1"
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
-	slsav02 "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance/v0.2"
-	slsav10 "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance/v1.0"
+	slsav02 "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance/v0.2"
+	slsav10 "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance/v1.0"
 )
 
 func Test_verifySubjectDigestName(t *testing.T) {

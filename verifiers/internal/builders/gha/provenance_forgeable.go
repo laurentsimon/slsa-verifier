@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
-	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance"
+	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance"
 
 	// Load provenance types.
-	slsav02 "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance/v0.2"
-	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance/v1.0"
+	slsav02 "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance/v0.2"
+	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance/v1.0"
 )
 
 func verifyProvenanceMatchesCertificate(prov slsaprovenance.Provenance, workflow *WorkflowIdentity) error {

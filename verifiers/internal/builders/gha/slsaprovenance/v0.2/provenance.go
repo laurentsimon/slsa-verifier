@@ -6,7 +6,7 @@ import (
 
 	intoto "github.com/in-toto/in-toto-golang/in_toto"
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
-	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance"
+	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance"
 )
 
 // TODO(https://github.com/slsa-framework/slsa-verifier/issues/473): Use a static mapping.

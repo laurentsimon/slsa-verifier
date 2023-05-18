@@ -17,7 +17,7 @@ import (
 
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
 	"github.com/slsa-framework/slsa-verifier/v2/options"
-	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gcb/keys"
+	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gcb/keys"
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 

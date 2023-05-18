@@ -710,6 +710,8 @@ github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966 h1:JIAuq3EE
 github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966/go.mod h1:sUM3LWHvSMaG192sy56D9F7CNvL7jUJVXoqM1QKLnog=
 github.com/slsa-framework/slsa-github-generator v1.4.0 h1:WiD4MDsSvVE2S8frGNBgb7Suy1wdIVFgY329LlvkXKo=
 github.com/slsa-framework/slsa-github-generator v1.4.0/go.mod h1:JVYHnGjS/RMuw3FCqB6U/N+yg80H6aWiKD5yaSGm1no=
+github.com/slsa-framework/slsa-verifier v1.4.1 h1:9s5ZCqGzCtjcUm64M2zkLRsUFXqFGRQEHeQ8SSEi02Q=
+github.com/slsa-framework/slsa-verifier v1.4.1/go.mod h1:lv9H08VWbM2KXjVnmcVIysarf35h0Zu/zWoWaoltHEg=
 github.com/smallstep/assert v0.0.0-20200723003110-82e2b9b3b262 h1:unQFBIznI+VYD1/1fApl1A+9VcBk+9dcqGfnePY87LY=
 github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1:OnSkiWE9lh6wB0YB77sQom3nweQdgAjqCqsofrRNTgc=
 github.com/smartystreets/assertions v1.1.0/go.mod h1:tcbTF8ujkAEcZ8TElKY+i30BzYlVhC/LOxJk7iOWnoo=

@@ -26,7 +26,7 @@ import (
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 
-type VerifyNpmPackageCommand struct {
+type VerifyNpmPackageProvenanceCommand struct {
 	AttestationsPath    string
 	BuilderID           *string
 	SourceURI           string
@@ -39,7 +39,7 @@ type VerifyNpmPackageCommand struct {
 	PrintProvenance     bool
 }
 
-func (c *VerifyNpmPackageCommand) Exec(ctx context.Context, tarballs []string) (*utils.TrustedBuilderID, error) {
+func (c *VerifyNpmPackageProvenanceCommand) Exec(ctx context.Context, tarballs []string) (*utils.TrustedBuilderID, error) {
 	var builderID *utils.TrustedBuilderID
 	if !options.ExperimentalEnabled() {
 		err := errors.New("feature support is only provided in SLSA_VERIFIER_EXPERIMENTAL mode")
@@ -78,7 +78,7 @@ func (c *VerifyNpmPackageCommand) Exec(ctx context.Context, tarballs []string) (
 			return nil, err
 		}
 
-		verifiedProvenance, outBuilderID, err := verifiers.VerifyNpmPackage(ctx, attestations, tarballHash, provenanceOpts, builderOpts)
+		verifiedProvenance, outBuilderID, err := verifiers.VerifyNpmPackageProvenance(ctx, attestations, tarballHash, provenanceOpts, builderOpts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Verifying npm package %s: FAILED: %v\n\n", tarball, err)
 			return nil, err

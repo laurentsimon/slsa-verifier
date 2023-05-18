@@ -28,7 +28,7 @@ import (
 type ComputeDigestFn func(string) (string, error)
 
 // Note: nil branch, tag, version-tag and builder-id means we ignore them during verification.
-type VerifyImageCommand struct {
+type VerifyImageProvenanceCommand struct {
 	// May be nil if supplied alongside in the registry
 	ProvenancePath      *string
 	BuilderID           *string
@@ -40,7 +40,7 @@ type VerifyImageCommand struct {
 	PrintProvenance     bool
 }
 
-func (c *VerifyImageCommand) Exec(ctx context.Context, artifacts []string) (*utils.TrustedBuilderID, error) {
+func (c *VerifyImageProvenanceCommand) Exec(ctx context.Context, artifacts []string) (*utils.TrustedBuilderID, error) {
 	artifactImage := artifacts[0]
 
 	// Verify that the reference is immutable.
@@ -70,7 +70,7 @@ func (c *VerifyImageCommand) Exec(ctx context.Context, artifacts []string) (*uti
 		}
 	}
 
-	verifiedProvenance, outBuilderID, err := verifiers.VerifyImage(ctx, artifacts[0], provenance, provenanceOpts, builderOpts)
+	verifiedProvenance, outBuilderID, err := verifiers.VerifyImageProvenance(ctx, artifacts[0], provenance, provenanceOpts, builderOpts)
 	if err != nil {
 		return nil, err
 	}

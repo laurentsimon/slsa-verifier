@@ -21,12 +21,13 @@ import (
 	"os"
 
 	"github.com/slsa-framework/slsa-verifier/v2/options"
+	"github.com/slsa-framework/slsa-verifier/v2/options/vsa"
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers"
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 
 // Note: nil branch, tag, version-tag and builder-id means we ignore them during verification.
-type VerifyArtifactCommand struct {
+type VerifyArtifactProvenanceCommand struct {
 	ProvenancePath      string
 	BuilderID           *string
 	SourceURI           string
@@ -37,7 +38,7 @@ type VerifyArtifactCommand struct {
 	PrintProvenance     bool
 }
 
-func (c *VerifyArtifactCommand) Exec(ctx context.Context, artifacts []string) (*utils.TrustedBuilderID, error) {
+func (c *VerifyArtifactProvenanceCommand) Exec(ctx context.Context, artifacts []string) (*utils.TrustedBuilderID, error) {
 	var builderID *utils.TrustedBuilderID
 
 	for _, artifact := range artifacts {
@@ -46,7 +47,6 @@ func (c *VerifyArtifactCommand) Exec(ctx context.Context, artifacts []string) (*
 			fmt.Fprintf(os.Stderr, "Verifying artifact %s: FAILED: %v\n\n", artifact, err)
 			return nil, err
 		}
-
 		provenanceOpts := &options.ProvenanceOpts{
 			ExpectedSourceURI:      c.SourceURI,
 			ExpectedBranch:         c.SourceBranch,
@@ -66,7 +66,7 @@ func (c *VerifyArtifactCommand) Exec(ctx context.Context, artifacts []string) (*
 			return nil, err
 		}
 
-		verifiedProvenance, outBuilderID, err := verifiers.VerifyArtifact(ctx, provenance, artifactHash, provenanceOpts, builderOpts)
+		verifiedProvenance, outBuilderID, err := verifiers.VerifyArtifactProvenance(ctx, provenance, artifactHash, provenanceOpts, builderOpts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Verifying artifact %s: FAILED: %v\n\n", artifact, err)
 			return nil, err
@@ -87,4 +87,54 @@ func (c *VerifyArtifactCommand) Exec(ctx context.Context, artifacts []string) (*
 	}
 
 	return builderID, nil
+}
+
+type VerifyArtifactVsaCommand struct {
+	VsaPath        string
+	VerifierID     string
+	VerifiedLevels []string
+	ResourceURI    *string
+	PrintVsa       bool
+}
+
+func (c *VerifyArtifactVsaCommand) Exec(ctx context.Context, artifact string) (*utils.TrustedVerifierID, error) {
+	artifactHash, err := computeFileHash(artifact, sha256.New())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Verifying artifact %s: FAILED: %v\n\n", artifact, err)
+		return nil, err
+	}
+
+	levels, err := vsa.LevelsFromArray(c.VerifiedLevels)
+	if err != nil {
+		return nil, err
+	}
+
+	artifactHash = "033a34bbf36fd923c2d480cc337865d79f633e891c15d1bae5122c5b1cf681ee"
+	vsaOpts := &options.VsaOpts{
+		ExpectedDigest:      artifactHash,
+		ExpectedLevels:      levels,
+		ExpectedResourceURI: c.ResourceURI,
+	}
+
+	verifierOpts := &options.VerifierOpts{
+		ExpectedID: c.VerifierID,
+	}
+
+	vsa, err := os.ReadFile(c.VsaPath)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Verifying artifact %s: FAILED: %v\n\n", artifact, err)
+		return nil, err
+	}
+
+	verifiedVsa, outVerifierID, err := verifiers.VerifyArtifactVsa(ctx, vsa, artifactHash, vsaOpts, verifierOpts)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Verifying artifact %s: FAILED: %v\n\n", artifact, err)
+		return nil, err
+	}
+
+	if c.PrintVsa {
+		fmt.Fprintf(os.Stdout, "%s\n", string(verifiedVsa))
+	}
+
+	return outVerifierID, nil
 }

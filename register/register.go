@@ -7,9 +7,9 @@ import (
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 
-var SLSAVerifiers = make(map[string]SLSAVerifier)
+var ProvenanceVerifiers = make(map[string]ProvenanceVerifier)
 
-type SLSAVerifier interface {
+type ProvenanceVerifier interface {
 	// IsAuthoritativeFor checks whether a verifier can
 	// verify provenance for a given builder identified by its
 	// `BuilderID`.
@@ -36,6 +36,39 @@ type SLSAVerifier interface {
 	) ([]byte, *utils.TrustedBuilderID, error)
 }
 
-func RegisterVerifier(name string, verifier SLSAVerifier) {
-	SLSAVerifiers[name] = verifier
+func RegisterProvenanceVerifier(name string, verifier ProvenanceVerifier) {
+	ProvenanceVerifiers[name] = verifier
+}
+
+var VsaVerifiers = make(map[string]VsaVerifier)
+
+type VsaVerifier interface {
+	// IsAuthoritativeFor checks whether a verifier can
+	// verify VSA for a given verifier identified by its
+	// `VerifierID`.
+	IsAuthoritativeFor(verifierID string) bool
+
+	// VerifyArtifact verifies a VSA for a supplied artifact.
+	VerifyArtifact(ctx context.Context,
+		vsa []byte, artifactHash string,
+		vsaOpts *options.VsaOpts,
+		verifierOpts *options.VerifierOpts,
+	) ([]byte, *utils.TrustedVerifierID, error)
+
+	// VerifyImage verifies a VSA for a supplied OCI image.
+	VerifyImage(ctx context.Context,
+		vsa []byte, artifactHash string,
+		vsaOpts *options.VsaOpts,
+		verifierOpts *options.VerifierOpts,
+	) ([]byte, *utils.TrustedVerifierID, error)
+
+	VerifyNpmPackage(ctx context.Context,
+		vsa []byte, artifactHash string,
+		vsaOpts *options.VsaOpts,
+		verifierOpts *options.VerifierOpts,
+	) ([]byte, *utils.TrustedVerifierID, error)
+}
+
+func RegisterVsaVerifier(name string, verifier VsaVerifier) {
+	VsaVerifiers[name] = verifier
 }

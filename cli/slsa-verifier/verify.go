@@ -31,20 +31,38 @@ const (
 )
 
 func verifyArtifactVsaCmd() *cobra.Command {
-	o := &verify.VerifyVSAOptions{}
+	o := &verify.VerifyVsaOptions{}
 	cmd := &cobra.Command{
 		Use:   "vsa",
 		Short: vsaShort,
 		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) < 1 {
-				return errors.New("expects at least one artifact")
+			if len(args) != 1 {
+				return errors.New("expects one artifact")
 			}
 			return nil
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("vsa hello")
-			fmt.Println("levels:", o.VerifiedLevels[0] == verify.VSASourceLevel0)
+			fmt.Println("levels:", o.VerifiedLevels)
 			fmt.Println("verifier.id:", o.VerifierID)
+
+			v := verify.VerifyArtifactVsaCommand{
+				VsaPath:        o.VsaPath,
+				VerifierID:     o.VerifierID,
+				VerifiedLevels: o.VerifiedLevels,
+				PrintVsa:       o.PrintVsa,
+			}
+
+			if cmd.Flags().Changed("resource-uri") {
+				v.ResourceURI = &o.ResourceURI
+			}
+
+			if _, err := v.Exec(cmd.Context(), args[0]); err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %v\n", FAILURE, err)
+				os.Exit(1)
+			} else {
+				fmt.Fprintf(os.Stderr, "%s\n", SUCCESS)
+			}
 		},
 	}
 
@@ -68,7 +86,7 @@ func verifyArtifactCmd() *cobra.Command {
 }
 
 func verifyArtifactProvenanceCmd() *cobra.Command {
-	o := &verify.VerifyOptions{}
+	o := &verify.VerifyProvenanceOptions{}
 
 	cmd := &cobra.Command{
 		Use:   "provenance",
@@ -80,7 +98,7 @@ func verifyArtifactProvenanceCmd() *cobra.Command {
 			return nil
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			v := verify.VerifyArtifactCommand{
+			v := verify.VerifyArtifactProvenanceCommand{
 				ProvenancePath:      o.ProvenancePath,
 				SourceURI:           o.SourceURI,
 				PrintProvenance:     o.PrintProvenance,
@@ -125,7 +143,7 @@ func verifyImageCmd() *cobra.Command {
 }
 
 func verifyImageProvenanceCmd() *cobra.Command {
-	o := &verify.VerifyOptions{}
+	o := &verify.VerifyProvenanceOptions{}
 
 	cmd := &cobra.Command{
 		Use:   "provenance",
@@ -137,7 +155,7 @@ func verifyImageProvenanceCmd() *cobra.Command {
 			return nil
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			v := verify.VerifyImageCommand{
+			v := verify.VerifyImageProvenanceCommand{
 				SourceURI:           o.SourceURI,
 				PrintProvenance:     o.PrintProvenance,
 				BuildWorkflowInputs: o.BuildWorkflowInputs.AsMap(),
@@ -184,7 +202,7 @@ func verifyNpmPackageCmd() *cobra.Command {
 }
 
 func verifyNpmAttestationsCmd() *cobra.Command {
-	o := &verify.VerifyNpmOptions{}
+	o := &verify.VerifyNpmAttestationsOptions{}
 
 	cmd := &cobra.Command{
 		Use: "attestations",
@@ -196,7 +214,7 @@ func verifyNpmAttestationsCmd() *cobra.Command {
 		},
 		Short: "Uses attestations from the registry",
 		Run: func(cmd *cobra.Command, args []string) {
-			v := verify.VerifyNpmPackageCommand{
+			v := verify.VerifyNpmPackageProvenanceCommand{
 				SourceURI:           o.SourceURI,
 				PrintProvenance:     o.PrintProvenance,
 				BuildWorkflowInputs: o.BuildWorkflowInputs.AsMap(),

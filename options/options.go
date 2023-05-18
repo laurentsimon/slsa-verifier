@@ -1,5 +1,7 @@
 package options
 
+import "github.com/slsa-framework/slsa-verifier/v2/options/vsa"
+
 // ProvenanceOpts are the options for checking provenance information.
 type ProvenanceOpts struct {
 	// ExpectedBranch is the expected branch (github_ref or github_base_ref) in
@@ -33,4 +35,24 @@ type ProvenanceOpts struct {
 type BuilderOpts struct {
 	// ExpectedID is the expected builder ID.
 	ExpectedID *string
+}
+
+// VerifierOpts are the options for checking the verifier.
+type VerifierOpts struct {
+	// ExpectedID is the expected builder ID.
+	ExpectedID string
+}
+
+// VsaOpts are the options for checking VSA information.
+type VsaOpts struct {
+	// TODO: purl (version / name ?)
+
+	// ExpectedDigest is the expected artifact sha included in the VSA.
+	ExpectedDigest string
+
+	// Expected levels for each track.
+	ExpectedLevels []vsa.Level
+
+	// Expected resource URI.
+	ExpectedResourceURI *string
 }

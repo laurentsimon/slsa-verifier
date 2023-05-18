@@ -15,12 +15,11 @@ import (
 	"github.com/slsa-framework/slsa-github-generator/signing/envelope"
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
 	"github.com/slsa-framework/slsa-verifier/v2/options"
-	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance"
+	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance"
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 
 	// Load provenance types.
-
-	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha/slsaprovenance/v1.0"
+	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha/slsaprovenance/v1.0"
 )
 
 // SignedAttestation contains a signed DSSE envelope

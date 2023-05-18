@@ -6,15 +6,15 @@ import (
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
 	"github.com/slsa-framework/slsa-verifier/v2/options"
 	register "github.com/slsa-framework/slsa-verifier/v2/register"
-	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gcb/keys"
+	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gcb/keys"
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 
-const VerifierName = "GCB"
+const BuilderName = "GCB"
 
 //nolint:gochecknoinits
 func init() {
-	register.RegisterVerifier(VerifierName, GCBVerifierNew())
+	register.RegisterProvenanceVerifier(BuilderName, GCBVerifierNew())
 }
 
 type GCBVerifier struct{}

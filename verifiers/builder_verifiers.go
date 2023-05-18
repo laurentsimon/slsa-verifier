@@ -7,14 +7,14 @@ import (
 	serrors "github.com/slsa-framework/slsa-verifier/v2/errors"
 	"github.com/slsa-framework/slsa-verifier/v2/options"
 	"github.com/slsa-framework/slsa-verifier/v2/register"
-	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gcb"
-	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/gha"
+	_ "github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gcb"
+	"github.com/slsa-framework/slsa-verifier/v2/verifiers/internal/builders/gha"
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils"
 )
 
-func getVerifier(builderOpts *options.BuilderOpts) (register.SLSAVerifier, error) {
+func getProvenanceVerifier(builderOpts *options.BuilderOpts) (register.ProvenanceVerifier, error) {
 	// By default, use the GHA builders
-	verifier := register.SLSAVerifiers[gha.VerifierName]
+	verifier := register.ProvenanceVerifiers[gha.BuilderName]
 
 	// If user provids a builderID, find the right verifier based on its ID.
 	if builderOpts.ExpectedID != nil &&
@@ -23,24 +23,24 @@ func getVerifier(builderOpts *options.BuilderOpts) (register.SLSAVerifier, error
 		if err != nil {
 			return nil, err
 		}
-		for _, v := range register.SLSAVerifiers {
+		for _, v := range register.ProvenanceVerifiers {
 			if v.IsAuthoritativeFor(name) {
 				return v, nil
 			}
 		}
 		// No builder found.
-		return nil, fmt.Errorf("%w: %s", serrors.ErrorVerifierNotSupported, *builderOpts.ExpectedID)
+		return nil, fmt.Errorf("%w: %s", serrors.ErrorBuilderVerifierNotSupported, *builderOpts.ExpectedID)
 	}
 
 	return verifier, nil
 }
 
-func VerifyImage(ctx context.Context, artifactImage string,
+func VerifyImageProvenance(ctx context.Context, artifactImage string,
 	provenance []byte,
 	provenanceOpts *options.ProvenanceOpts,
 	builderOpts *options.BuilderOpts,
 ) ([]byte, *utils.TrustedBuilderID, error) {
-	verifier, err := getVerifier(builderOpts)
+	verifier, err := getProvenanceVerifier(builderOpts)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -48,12 +48,12 @@ func VerifyImage(ctx context.Context, artifactImage string,
 	return verifier.VerifyImage(ctx, provenance, artifactImage, provenanceOpts, builderOpts)
 }
 
-func VerifyArtifact(ctx context.Context,
+func VerifyArtifactProvenance(ctx context.Context,
 	provenance []byte, artifactHash string,
 	provenanceOpts *options.ProvenanceOpts,
 	builderOpts *options.BuilderOpts,
 ) ([]byte, *utils.TrustedBuilderID, error) {
-	verifier, err := getVerifier(builderOpts)
+	verifier, err := getProvenanceVerifier(builderOpts)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -62,12 +62,12 @@ func VerifyArtifact(ctx context.Context,
 		provenanceOpts, builderOpts)
 }
 
-func VerifyNpmPackage(ctx context.Context,
+func VerifyNpmPackageProvenance(ctx context.Context,
 	attestations []byte, tarballHash string,
 	provenanceOpts *options.ProvenanceOpts,
 	builderOpts *options.BuilderOpts,
 ) ([]byte, *utils.TrustedBuilderID, error) {
-	verifier, err := getVerifier(builderOpts)
+	verifier, err := getProvenanceVerifier(builderOpts)
 	if err != nil {
 		return nil, nil, err
 	}

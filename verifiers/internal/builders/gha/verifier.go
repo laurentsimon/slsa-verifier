@@ -20,11 +20,11 @@ import (
 	"github.com/slsa-framework/slsa-verifier/v2/verifiers/utils/container"
 )
 
-const VerifierName = "GHA"
+const BuilderName = "GHA"
 
 //nolint:gochecknoinits
 func init() {
-	register.RegisterVerifier(VerifierName, GHAVerifierNew())
+	register.RegisterProvenanceVerifier(BuilderName, GHAVerifierNew())
 }
 
 type GHAVerifier struct{}
