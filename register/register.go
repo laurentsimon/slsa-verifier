@@ -63,7 +63,7 @@ type VsaVerifier interface {
 	) ([]byte, *utils.TrustedVerifierID, error)
 
 	VerifyNpmPackage(ctx context.Context,
-		vsa []byte, tarballHash string,
+		vsa []byte,
 		vsaOpts *options.VsaOpts,
 		verifierOpts *options.VerifierOpts,
 	) ([]byte, *utils.TrustedVerifierID, error)

@@ -64,7 +64,7 @@ func (v *StaticKeyVerifier) IsAuthoritativeFor(verifierID string) bool {
 
 // VerifyArtifact verifies VSA for an artifact.
 func (v *StaticKeyVerifier) VerifyArtifact(ctx context.Context,
-	vsa []byte, artifactHash string,
+	vsa []byte,
 	vsaOpts *options.VsaOpts,
 	verifierOpts *options.VerifierOpts,
 ) ([]byte, *utils.TrustedVerifierID, error) {
@@ -90,8 +90,7 @@ func (v *StaticKeyVerifier) VerifyArtifact(ctx context.Context,
 	}
 
 	// Verify the VSA.
-	vsaOpts.ExpectedDigest = artifactHash
-	verifiedVsa, verifierID, err := vsaVerifier.Verify(artifactHash, vsaOpts, verifierOpts)
+	verifierID, err := vsaVerifier.Verify(ctx, vsaOpts, verifierOpts, v.metadata.encoding)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -101,7 +100,7 @@ func (v *StaticKeyVerifier) VerifyArtifact(ctx context.Context,
 
 // VerifyNpmPackage verifies an npm package tarball.
 func (v *StaticKeyVerifier) VerifyNpmPackage(ctx context.Context,
-	attestations []byte, tarballHash string,
+	attestations []byte,
 	vsaOpts *options.VsaOpts,
 	verifierOpts *options.VerifierOpts,
 ) ([]byte, *utils.TrustedVerifierID, error) {
